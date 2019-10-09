@@ -7,14 +7,36 @@ can work in batch mode for multiple data files
 
 def singleMode():
     data_file = input('data file path (absolute path recommended): ')
+    rename_index = input('rename data file? ([y]/n): ').lower()
+    timestamp_index = input('add time stamp? ([y]/n): ').lower()
+    if rename_index == '' or rename_index == 'y':
+        isrename = True
+    else:
+        isrename = False
+    if timestamp_index == '' or timestamp_index == 'y':
+        istimestamp = True
+    else:
+        istimestamp = False
+
     try:
-        autoContin(data_file, full_auto=True, rename=True)
+        autoContin(data_file, full_auto=True, rename=isrename, addTimeStamp=istimestamp)
         print('done')
     except:
         print('Ooops, something went wrong...')
 
 def batchMode():
     data_folder = input('data folder (absolute path recommended): ')
+    rename_index = input('rename data file? ([y]/n): ').lower()
+    timestamp_index = input('add time stamp? ([y]/n): ').lower()
+    if rename_index == '' or rename_index == 'y':
+        isrename = True
+    else:
+        isrename = False
+    if timestamp_index == '' or timestamp_index == 'y':
+        istimestamp = True
+    else:
+        istimestamp = False
+
     try:
         file_list = os.listdir(data_folder)
         print('\n'+'='*20 + ' AutoCONTIN by LiMu ' + '='*20 + '\n')
@@ -30,7 +52,7 @@ def batchMode():
                 N_datafile += 1
                 try:
                     datafile_abspath = os.path.join(data_folder, f)
-                    autoContin(datafile_abspath, full_auto=True, rename=True)
+                    autoContin(datafile_abspath, full_auto=True, rename=isrename, addTimeStamp=istimestamp)
                     print(' - O - CONTIN success | {}'.format(f))
                     N_success += 1
                 except:
