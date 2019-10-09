@@ -6,7 +6,10 @@ import re
 file_path = os.path.abspath(os.path.dirname(__file__))
 
 # generate CONTIN exec's absolute path
-CONTINPath = '\"{}\"'.format(os.path.join(file_path, 'contin-windows.exe'))  # contin-windows.exe is in the same folder
+#CONTINPath = '\"{}\"'.format(os.path.join(file_path, 'contin-windows.exe'))  # contin-windows.exe is in the same folder
+#
+# now please put contin-windows.exe in C:\Program Files (x86)\CONTIN\
+CONTINPath = '\"{}\"'.format('C:\\Program Files (x86)\\CONTIN\\contin-windows.exe')
 
 def runCONTINfit(xdata, ydata, parameterFile, continInputFile=None, continOutputFile=None):
     """
