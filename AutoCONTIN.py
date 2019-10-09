@@ -5,7 +5,7 @@ from CONTINWrapper import runCONTINfit
 
 class autoContin:
 
-    def __init__(self, filename, filetype='brookhaven dat file', full_auto=False, rename=False):
+    def __init__(self, filename, filetype='brookhaven dat file', full_auto=False, rename=False, addTimeStamp=True):
         # set the program folder as working folder, and use absolute path for data file !
         contin_path = os.path.dirname(__file__)
         os.chdir(contin_path)
@@ -18,10 +18,26 @@ class autoContin:
 
             self.readBrookhavenRawFile(filepath)
 
-            if rename:  # rename raw file with sample ID
+            # rename raw file with sample ID (+ date + time)
+            if rename:  
                 oldname = os.path.join(self.dir, fname)
-                newname = os.path.join(self.dir, self.sampleInfo['SampleID']+'.dat')
+                
+                # add time stamp to avoid duplication of name
+                if addTimeStamp:
+                    newfname = '{}_{}{}_{}{}.dat'.format(
+                        self.sampleInfo['SampleID'],
+                        self.sampleInfo['Date'].split('/')[0],
+                        self.sampleInfo['Date'].split('/')[1],
+                        self.sampleInfo['Time'].split(':')[0],
+                        self.sampleInfo['Time'].split(':')[1]
+                    )
+                    newname = os.path.join(self.dir, newfname)
+                else:
+                    newname = os.path.join(self.dir, self.sampleInfo['SampleID']+'.dat')
+                self.fname = newname
                 os.rename(oldname, newname)
+            else:
+                self.fname = fname
 
             self.calcCtau()
             if full_auto:
@@ -41,7 +57,7 @@ class autoContin:
         self.sampleInfo = {
             'SampleID': alldata[-4][:-1],
             'OperatorID': alldata[-3][:-1],
-            'Data': alldata[-2][:-1],
+            'Date': alldata[-2][:-1],
             'Time': alldata[-1][:-1]
         }
         self.testParams = {
@@ -207,7 +223,7 @@ NONNEG,,1'''.format(str(gamma_min), str(gamma_max))
             for i in range(len(self.RhPeakValues)):
                 headertxt += 'Rh peak {} = {}\n'.format(str(i+1), self.RhPeakValues[i])
             headertxt += '\nRh\tgamma*G(gamma)'
-            fname = os.path.join(self.dir, self.sampleInfo['SampleID']+'_Rh.txt')
+            fname = os.path.join(self.dir, self.fname[:-4] + '_Rh.txt')
             np.savetxt(fname, self.RhDistribution, header=headertxt, delimiter='\t')
 
     def _calcRhPeakValues(self):
@@ -296,6 +312,8 @@ NONNEG,,1'''.format(str(gamma_min), str(gamma_max))
         figure = plt.figure(figsize=plt.figaspect(1.))  # adjust aspect ratio of the whole figure
         plt.subplots_adjust(hspace=0.5)  # adjust the space between subplots
 
+        plt.suptitle('{} at {} {}'.format(self.sampleInfo['SampleID'], self.sampleInfo['Date'], self.sampleInfo['Time']))
+
         ax1 = plt.subplot(211)
         ax1.set_xscale("log", nonposx='clip')
         ax1.plot(self.Ctau[:,0], self.Ctau[:,1], 'o')
@@ -322,9 +340,8 @@ NONNEG,,1'''.format(str(gamma_min), str(gamma_max))
             y_pos = self.RhDistribution[n, 1] + 0.05
             ax2.text(x_pos, y_pos, '{:.2f}nm'.format(p), ha='center')
 
-        
         if save:
-            fname = os.path.join(self.dir, self.sampleInfo['SampleID'] + '_Report.png')
+            fname = os.path.join(self.dir, self.fname[:-4] + '_Report.png')
             plt.savefig(fname, dpi=300)
         if show:
             plt.show()
@@ -335,5 +352,5 @@ if __name__ == "__main__":
     test.doCONTIN()
     test.readCONTINOutput()
     test.calcRhDistribution()
-    test.plotCONTINReport(show=False, save=True)
+    test.plotCONTINReport(show=True, save=True)
     #test.plotDistribution(type='Rh')
