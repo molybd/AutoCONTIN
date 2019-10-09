@@ -1,0 +1,14 @@
+  TEST DATA SET 1 (inverse laplace transform)                             
+LAST,,1        
+GMNMX,1,1                                             
+GMNMX,2,1000000.0                                                
+IWT,,1                                                
+NERFIT,,0                                                
+NINTT,,-1
+NLINF,,1
+IFORMY,,(1E11.4)
+IFORMT,,(1E11.4)                                                                  
+DOUSNQ,,1                                                
+IUSER,10,2                                                
+RUSER,10,-1
+NONNEG,,1
