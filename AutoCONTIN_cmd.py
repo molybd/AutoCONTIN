@@ -53,5 +53,6 @@ if __name__ == "__main__":
             batchMode()
         else:
             print('please input 1 or 2 !')
+    input('\npress ENTER to exit')
             
             
