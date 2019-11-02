@@ -5,7 +5,7 @@ from CONTINWrapper import runCONTINfit
 
 class autoContin:
 
-    def __init__(self, filename, filetype='brookhaven dat file', full_auto=False, rename=False, addTimeStamp=True):
+    def __init__(self, filename, filetype='brookhaven dat file', full_auto=False, rename=False, addTimeStamp=True, gamma_min=1, gamma_max=1e6):
         # set the program folder as working folder, and use absolute path for data file !
         contin_path = os.path.dirname(__file__)
         os.chdir(contin_path)
@@ -41,7 +41,7 @@ class autoContin:
 
             self.calcCtau()
             if full_auto:
-                self.doCONTIN()
+                self.doCONTIN(gamma_min=gamma_min, gamma_max=gamma_max)
                 self.readCONTINOutput()
                 self.calcRhDistribution()
                 self.plotCONTINReport(show=False, save=True)

@@ -9,6 +9,18 @@ def singleMode():
     data_file = input('data file path (absolute path recommended): ')
     rename_index = input('rename data file? ([y]/n): ').lower()
     timestamp_index = input('add time stamp? ([y]/n): ').lower()
+    
+    gamma_min_input = input('  gamma min (defalt: 1): ')
+    gamma_max_input = input('gamma max (defalt: 1e6): ')
+    if gamma_min_input == '':
+        gamma_min = 1
+    else:
+        gamma_min = float(gamma_min_input)
+    if gamma_max_input == '':
+        gamma_max = 1e6
+    else:
+        gamma_max = float(gamma_max_input)
+
     if rename_index == '' or rename_index == 'y':
         isrename = True
     else:
@@ -19,7 +31,7 @@ def singleMode():
         istimestamp = False
 
     try:
-        autoContin(data_file, full_auto=True, rename=isrename, addTimeStamp=istimestamp)
+        autoContin(data_file, full_auto=True, rename=isrename, addTimeStamp=istimestamp, gamma_min=gamma_min, gamma_max=gamma_max)
         print('done')
     except:
         print('Ooops, something went wrong...')
@@ -28,6 +40,18 @@ def batchMode():
     data_folder = input('data folder (absolute path recommended): ')
     rename_index = input('rename data file? ([y]/n): ').lower()
     timestamp_index = input('add time stamp? ([y]/n): ').lower()
+
+    gamma_min_input = input('  gamma min (defalt: 1): ')
+    gamma_max_input = input('gamma max (defalt: 1e6): ')
+    if gamma_min_input == '':
+        gamma_min = 1
+    else:
+        gamma_min = float(gamma_min_input)
+    if gamma_max_input == '':
+        gamma_max = 1e6
+    else:
+        gamma_max = float(gamma_max_input)
+
     if rename_index == '' or rename_index == 'y':
         isrename = True
     else:
@@ -52,7 +76,7 @@ def batchMode():
                 N_datafile += 1
                 try:
                     datafile_abspath = os.path.join(data_folder, f)
-                    autoContin(datafile_abspath, full_auto=True, rename=isrename, addTimeStamp=istimestamp)
+                    autoContin(datafile_abspath, full_auto=True, rename=isrename, addTimeStamp=istimestamp, gamma_min=gamma_min, gamma_max=gamma_max)
                     print(' - O - CONTIN success | {}'.format(f))
                     N_success += 1
                 except:
